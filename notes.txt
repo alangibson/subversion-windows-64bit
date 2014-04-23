@@ -1,0 +1,37 @@
+
+echo ********************************
+echo ** Build Serf 1.3.*
+echo ********************************
+
+cd %BUILD_HOME%\serf-%SERF_VERSION%
+
+:: Clean
+:: c:\tools\python27\python.exe ..\scons-local-2.3.0\scons.py -c
+
+mkdir %BUILD_HOME%\serf-%SERF_VERSION%\Release
+
+:: Build
+%PYTHON_27_32_HOME%\python.exe %BUILD_HOME%\scons.py ^
+  APR=%BUILD_HOME%\subversion-%SVN_VERSION%\apr ^
+  APU=%BUILD_HOME%\subversion-%SVN_VERSION%\apr-util ^
+  OPENSSL=%BUILD_HOME%\openssl-%OPENSSL_VERSION% ^
+  ZLIB=%BUILD_HOME%\zlib-%ZLIB_VERSION% ^
+  TARGET_ARCH=%TARGET_ARCH% ^
+  MSVC_VERSION=%MSVC_VERSION% ^
+  PREFIX=%BUILD_HOME%\serf-%SERF_VERSION%\Release
+
+%PYTHON_27_32_HOME%\python.exe %BUILD_HOME%\scons.py install
+
+cd %BUILD_HOME%
+
+echo ********************************
+echo ** Build Neon
+echo ********************************
+
+cd %BUILD_HOME%\neon-%NEON_VERSION%
+
+nmake /f neon.mak ^
+  EXPAT_SRC=%BUILD_HOME%\expat-%EXPAT_VERSION% ^
+  OPENSSL_SRC=%BUILD_HOME%\openssl-%OPENSSL_VERSION%
+
+cd %BUILD_HOME%
